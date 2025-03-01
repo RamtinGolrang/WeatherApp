@@ -60,6 +60,8 @@ Denna strukturering följer en paketbaserad organisation som är vanlig i JVM-mi
 1. Klona projektet:
 ```
 git clone https://github.com/RamtinGolrang/WeatherApp.git
+```
+```
 cd WeatherApp
 ```
 
