@@ -17,13 +17,14 @@ fun main() {
     val app = Javalin.create { config ->
         config.http.defaultContentType = "application/json"
         config.jsonMapper(io.javalin.json.JavalinJackson(objectMapper))
+        config.staticFiles.add("/public")
     }.start(7070)
 
     app.get("/weather", weatherController::getWeatherForCity)
     app.get("/") { ctx ->
-        ctx.result("Välkommen till väderapplikationen! Använd /weather?city=STADSNAMN för att få väderinformation.")
+        //ctx.result("Välkommen till väderapplikationen! Använd /weather?city=STADSNAMN för att få väderinformation.")
+        ctx.redirect("/index.html")
     }
 
     println("Server startad på http://localhost:7070")
 }
-

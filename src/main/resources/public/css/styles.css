@@ -1,0 +1,59 @@
+body {
+    background-color: #f5f5f5;
+    padding-top: 20px;
+}
+.weather-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+}
+.temp-display {
+    font-size: 3rem;
+    font-weight: bold;
+}
+.weather-info {
+    font-size: 1.2rem;
+}
+.error-message {
+    color: #dc3545;
+    display: none;
+    margin-top: 10px;
+}
+.weather-icon {
+    font-size: 50px;
+    color: #4a90e2;
+    margin-bottom: 15px;
+}
+.temperature-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.temperature {
+    font-size: 24px;
+    font-weight: bold;
+}
+.fa-sun {
+    color: #ffc107; /* Gul för sol */
+}
+.fa-cloud, .fa-cloud-sun {
+    color: #90a4ae; /* Grå för moln */
+}
+.fa-cloud-rain, .fa-cloud-showers-heavy {
+    color: #4fc3f7; /* Ljusblå för regn */
+}
+.fa-snowflake {
+    color: #e1f5fe; /* Mycket ljusblå för snö */
+}
+.fa-cloud-bolt {
+    color: #5c6bc0; /* Lila-aktig för åskväder */
+}
+.fa-smog {
+    color: #b0bec5; /* Ljusgrå för dimma */
+}

@@ -13,6 +13,7 @@ En enkel väderapplikation byggd med Kotlin och Javalin som integrerar med publi
 - Caching av väderdata för att minska antalet API-anrop (data cachas i 30 minuter)
 - Formaterat JSON-svar för bättre läsbarhet
 - Loggning av cache-användning (HIT/MISS)
+- Strukturerad frontend med separerade HTML, CSS och JavaScript-filer
 
 ## Teknologier
 
@@ -21,6 +22,8 @@ En enkel väderapplikation byggd med Kotlin och Javalin som integrerar med publi
 - OkHttp (HTTP-klient)
 - Jackson (JSON-parsing)
 - JUnit och Mockito (för testning)
+- Bootstrap (CSS-ramverk)
+- Font Awesome (ikoner)
 
 ## Projektstruktur
 
@@ -41,12 +44,20 @@ src/main/kotlin/com/weatherapp/
     ├── OpenStreetMapException.kt  - Anpassade exceptions
     └── WeatherApiException.kt
     
+src/main/resources/
+└── public/                      - Statiska resurser för frontend
+    ├── index.html               - Huvudsaklig HTML-struktur
+    ├── css/
+    │   └── styles.css           - Separerade CSS-stilar
+    └── js/
+        └── weather.js           - Separerad JavaScript-funktionalitet
+    
 src/test/kotlin/com/weatherapp/
 └── service/
     └── WeatherServiceTest.kt    - Enhetstester för WeatherService
 ```
 
-Denna strukturering följer en paketbaserad organisation som är vanlig i JVM-miljöer och gör koden mer underhållbar och överskådlig.
+Denna strukturering följer en paketbaserad organisation som är vanlig i JVM-miljöer och gör koden mer underhållbar och överskådlig. Frontend-delen använder nu en strukturerad uppdelning där HTML, CSS och JavaScript är separerade för bättre underhållbarhet.
 
 ## Kom igång
 
@@ -78,12 +89,12 @@ cd WeatherApp
 Applikationen kommer att starta på `http://localhost:7070`
 
 ### Användning
+Hämta väderdata för en stad direkt via webbgränssnittet genom att öppna `http://localhost:7070` i din webbläsare.
 
-Hämta väderdata för en stad:
+Eller genom att använda API:et:
 ```
-GET http://localhost:7070/weather?city=Stockholm
+GET http://localhost:7070/weather?city=STADSDEL
 ```
-
 Svaret kommer att vara i JSON-format:
 ```json
 {
@@ -107,8 +118,19 @@ Jag valde att använda en paketbaserad struktur med tydlig separation av ansvar:
 - **Modeller** - Representerar data från externa API:er och interna datastrukturer
 - **Cache** - Hanterar cachning av data för optimerad prestanda
 - **Exceptions** - Anpassade undantagsklasser för tydlig felhantering
+- **Frontend** - Uppdelad i strukturerade komponenter (HTML, CSS och JavaScript)
 
 Denna uppdelning gör koden lättare att underhålla och testa, och följer principen om "separation of concerns". Genom att organisera koden i paket baserat på funktionalitet blir koden också mer skalbar och lättare att navigera när projektet växer.
+
+### Frontend-struktur
+
+För frontenden har jag valt att separera HTML, CSS och JavaScript i olika filer:
+
+- **index.html** - Innehåller endast strukturen och markup
+- **styles.css** - Innehåller alla stilar och visuella definitioner
+- **weather.js** - Innehåller all interaktiv funktionalitet och API-anrop
+
+Denna uppdelning gör koden lättare att underhålla, möjliggör bättre caching i webbläsaren och förenklar arbetsflödet om flera utvecklare jobbar på projektet samtidigt.
 
 ### Testbarhet
 
@@ -126,7 +148,7 @@ Jag implementerade omfattande felhantering med specifika undantagsklasser och HT
 - 404 Not Found - Om staden inte hittas
 - 500 Internal Server Error - För API-fel eller interna fel
 
-Alla fel returneras med ett tydligt felmeddelande i JSON-format.
+Alla fel returneras med ett tydligt felmeddelande i JSON-format och presenteras användarvänligt i webbgränssnittet.
 
 ### Caching
 
@@ -149,7 +171,8 @@ Testerna använder Mockito för att simulera externa API-anrop, vilket gör test
 - **Mer robusta tester** - Utöka testerna för att täcka fler scenarier
 - **Persistens av cache** - Implementera lagring av cache till disk
 - **Mer detaljerad väderinformation** - Visa prognos för kommande dagar
-- **Frontend** - Lägga till ett enkelt webbgränssnitt
+- **Responsiv design** - Förbättra mobilanvändning av webbgränssnittet
+- **Animerade väderikoner** - Lägga till dynamiska väderikoner
 - **Konfigurerbarhet** - Göra cachens TTL och andra parametrar konfigurerbara
 
 ## Saker jag fokuserade på
@@ -158,3 +181,5 @@ Testerna använder Mockito för att simulera externa API-anrop, vilket gör test
 - Välstrukturerad och läsbar kod
 - Caching för att optimera prestanda
 - Testbarhet
+- Användarvänligt och felfångande gränssnitt
+- Strukturerad och underhållbar frontend med separerade komponenter
