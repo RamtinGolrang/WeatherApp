@@ -1,3 +1,234 @@
+
+<details>
+<summary><b style="font-size: 1.7em;">🇬🇧 English</b></summary>
+
+# Weather Application
+
+A simple weather application built with Kotlin and Javalin that integrates with public APIs to fetch weather information for a given city.
+
+## Features
+
+- Users can enter a city and get current weather information
+- Validates that the specified location is actually a city
+- Integrates with OpenStreetMap API to find coordinates for cities
+- Fetches weather data from yr.no API based on coordinates
+- Presents relevant weather information (temperature, weather type, wind speed, humidity)
+- Robust error handling for various API errors and invalid inputs
+- Caching of weather data to reduce the number of API calls (data is cached for 30 minutes)
+- Formatted JSON response for better readability
+- Logging of cache usage (HIT/MISS)
+- Structured frontend with separated HTML, CSS and JavaScript files
+
+## Technologies
+
+- Kotlin
+- Javalin (web framework)
+- OkHttp (HTTP client)
+- Jackson (JSON parsing)
+- JUnit and Mockito (for testing)
+- Bootstrap (CSS framework)
+- Font Awesome (icons)
+
+## Project Structure
+
+```
+Docker
+├── Dockerfile                   - Dockerfile and compose to run
+└── docker-compose.yml
+
+src/main/kotlin/com/weatherapp/
+├── Main.kt                      - Main application and server settings
+├── controller/
+│   └── WeatherController.kt     - Handles HTTP requests
+├── service/
+│   └── WeatherService.kt        - Contains business logic and API integrations
+├── model/
+│   ├── WeatherResponse.kt       - Application response model
+│   ├── LocationModel.kt         - Models for location data (Coordinates, OpenStreetMapResponse)
+│   └── YrModels.kt              - Models for yr.no API responses
+├── cache/
+│   └── CacheModel.kt            - Cache-related data models
+└── exception/
+    ├── OpenStreetMapException.kt  - Custom exceptions
+    └── WeatherApiException.kt
+    
+src/main/resources/
+└── public/                      - Static resources for frontend
+    ├── index.html               - Main HTML structure
+    ├── css/
+    │   └── styles.css           - Separated CSS styles
+    └── js/
+        └── weather.js           - Separated JavaScript functionality
+    
+src/test/kotlin/com/weatherapp/
+└── service/
+    └── WeatherServiceTest.kt    - Unit tests for WeatherService
+```
+
+This structure follows a package-based organization that is common in JVM environments and makes the code more maintainable and clear. The frontend part now uses a structured division where HTML, CSS, and JavaScript are separated for better maintainability.
+
+## Getting Started
+
+### Prerequisites
+
+- JDK 17 or later
+- Gradle
+
+### Compilation and Running
+
+**GitHub option:**
+
+1. Clone the project:
+```
+git clone https://github.com/RamtinGolrang/WeatherApp.git
+```
+```
+cd WeatherApp
+```
+
+2. Build the project:
+```
+./gradlew build
+```
+
+3. Run the application:
+```
+./gradlew run
+```
+
+The application will start on `http://localhost:7070`
+
+**Docker option:**
+
+Docker Deployment
+
+1. Pull the Docker image:
+```
+docker pull ramtin93/weatherapp:latest
+```
+
+2. Run the application:
+```
+docker run -p 7070:7070 ramtin93/weatherapp:latest
+```
+
+The application will be accessible at `http://localhost:7070`.
+
+**If port 7070 is occupied you can config it with docker:**
+
+- **Automatic port mapping**: You can use the `-P` flag to let Docker automatically assign a port:
+  ```
+  docker run -P firstnameLastname/weatherApp:latest
+  ```
+  Use `docker ps` to see which port was assigned.
+
+
+- **Custom port mapping**: If you want to use a different port on your host machine:
+  ```
+  docker run -p 8080:7070 firstnameLastname/weatherApp:latest
+  ```
+  This makes the app available at `http://localhost:8080`.
+
+### Usage
+Retrieve weather data for a city directly via the web interface by opening `http://localhost:7070` in your browser.
+
+Or by using the API:
+```
+GET http://localhost:7070/weather?city=CITYNAME
+```
+The response will be in JSON format:
+```json
+{
+  "temperature": 15.2,
+  "windSpeed": 3.5,
+  "humidity": 65.0,
+  "description": "Delvis molnigt",
+  "symbolCode": "partlycloudy_day",
+  "updatedAt": "2023-10-16T12:00:00Z"
+}
+```
+
+## Design Decisions and Considerations
+
+### Architecture
+
+I chose to use a package-based structure with clear separation of responsibilities:
+
+- **Controller** - Handles incoming HTTP requests and responses
+- **Service** - Contains business logic and API integrations
+- **Models** - Represents data from external APIs and internal data structures
+- **Cache** - Handles caching of data for optimized performance
+- **Exceptions** - Custom exception classes for clear error handling
+- **Frontend** - Divided into structured components (HTML, CSS, and JavaScript)
+
+This division makes the code easier to maintain and test, and follows the principle of "separation of concerns". By organizing the code into packages based on functionality, the code also becomes more scalable and easier to navigate as the project grows.
+
+### Frontend Structure
+
+For the frontend, I've chosen to separate HTML, CSS, and JavaScript into different files:
+
+- **index.html** - Contains only the structure and markup
+- **styles.css** - Contains all styles and visual definitions
+- **weather.js** - Contains all interactive functionality and API calls
+
+This separation makes the code easier to maintain, enables better caching in the browser, and simplifies the workflow if multiple developers are working on the project simultaneously.
+
+### Testability
+
+The code is designed with testability in mind:
+
+- **Open classes and factory methods**: The Service class is designed as `open` with interchangeable dependencies via factory methods, which enables effective mocking.
+- **Pure logic**: Business logic is isolated from HTTP and JSON handling, making it easier to test.
+- **Clear interfaces**: Each component has a clear area of responsibility, which simplifies test writing.
+
+### Error Handling
+
+I implemented extensive error handling with specific exception classes and HTTP status codes:
+
+- 400 Bad Request - If the user does not specify a city
+- 404 Not Found - If the city is not found
+- 500 Internal Server Error - For API errors or internal errors
+
+All errors are returned with a clear error message in JSON format and presented in a user-friendly way in the web interface.
+
+### Caching
+
+To reduce the number of API calls and improve performance, I implemented a simple caching mechanism. Weather data is cached for 30 minutes, which provides a good balance between performance and data freshness.
+
+## Unit Tests
+
+The application includes complete unit tests using JUnit and Mockito. The tests verify the application's important functionality:
+
+- **Successful retrieval of weather data**: Verifies that the application correctly fetches and interprets data from the APIs.
+- **Error handling for invalid locations**: Tests that the application correctly identifies and handles attempts to search for places that don't exist.
+- **Validation of city type**: Ensures that only actual cities are accepted as valid input.
+- **Caching functionality**: Verifies that the caching mechanism works as expected and reduces the number of API calls.
+- **Robust API error handling**: Tests the application's response when external APIs fail.
+
+The tests use Mockito to simulate external API calls, making the tests fast and reliable without needing to make actual network calls.
+
+## Possible Improvements
+
+- **More robust tests** - Expand the tests to cover more scenarios
+- **Persistence of cache** - Implement storing the cache to disk
+- **More detailed weather information** - Show forecast for upcoming days
+- **Responsive design** - Improve mobile usage of the web interface
+- **Animated weather icons** - Add dynamic weather icons
+- **Configurability** - Make the cache TTL and other parameters configurable
+
+## Things I Focused On
+
+- Robust API integration with proper error handling
+- Well-structured and readable code
+- Caching to optimize performance
+- Testability
+- User-friendly and error-catching interface
+- Structured and maintainable frontend with separated components
+</details>
+
+<details open>
+<summary><b style="font-size: 1.7em;">🇸🇪 Svenska</b></summary>
+
 # Väderapplikation
 
 En enkel väderapplikation byggd med Kotlin och Javalin som integrerar med publika API:er för att hämta väderinformation för en given stad.
@@ -28,6 +259,10 @@ En enkel väderapplikation byggd med Kotlin och Javalin som integrerar med publi
 ## Projektstruktur
 
 ```
+Docker
+├── Dockerfile                   - Dockerfil och körbar compose
+└── docker-compose.yml
+
 src/main/kotlin/com/weatherapp/
 ├── Main.kt                      - Huvudapplikation och serverinställningar
 ├── controller/
@@ -68,6 +303,8 @@ Denna strukturering följer en paketbaserad organisation som är vanlig i JVM-mi
 
 ### Kompilering och körning
 
+**GitHub alternativ:**
+
 1. Klona projektet:
 ```
 git clone https://github.com/RamtinGolrang/WeatherApp.git
@@ -85,15 +322,44 @@ cd WeatherApp
 ```
 ./gradlew run
 ```
-
 Applikationen kommer att starta på `http://localhost:7070`
+
+**Docker alternativ:**
+
+1. Hämta Docker-imagen:
+```
+docker pull ramtin93/weatherapp:latest
+```
+
+2. Kör applikationen:
+```
+docker run -p 7070:7070 ramtin93/weatherapp:latest
+```
+
+Applikationen kommer att vara tillgänglig på `http://localhost:7070`.
+
+**Om port 7070 är upptagen så finns alternativa lösningar:**
+
+- **Automatisk portmappning**: Du kan använda flaggan `-P` för att låta Docker automatiskt tilldela en port:
+  ```
+  docker run -P ramtin93/weatherapp:latest
+  ```
+  Använd `docker ps` för att se vilken port som tilldelats.
+
+
+- **Anpassad portmappning**: Om du vill använda en annan port på din värdmaskin:
+  ```
+  docker run -p 8080:7070 ramtin93/weatherapp:latest
+  ```
+  Detta gör applikationen tillgänglig på `http://localhost:8080`.
+
 
 ### Användning
 Hämta väderdata för en stad direkt via webbgränssnittet genom att öppna `http://localhost:7070` i din webbläsare.
 
 Eller genom att använda API:et:
 ```
-GET http://localhost:7070/weather?city=STADSDEL
+GET http://localhost:7070/weather?city=STAD
 ```
 Svaret kommer att vara i JSON-format:
 ```json
@@ -183,3 +449,5 @@ Testerna använder Mockito för att simulera externa API-anrop, vilket gör test
 - Testbarhet
 - Användarvänligt och felfångande gränssnitt
 - Strukturerad och underhållbar frontend med separerade komponenter
+
+</details>

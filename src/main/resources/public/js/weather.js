@@ -89,9 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return 'fa-solid fa-cloud-bolt';
         } else if (description === 'Dimma') {
             return 'fa-solid fa-smog';
-        } else if (description.includes('wind')) {
-            return 'fa-solid fa-wind';
-        } else {
+        }else {
             return 'fa-solid fa-cloud';
         }
     }
