@@ -53,7 +53,7 @@ class WeatherServiceTest {
     @Test
     fun `getWeatherForCity should return weather data when API calls are successful`() {
         // Arrange - Konfigurera mock-svar för OpenStreetMap
-        val locationJson = """[{"lat":"59.3293","lon":"18.0686","display_name":"Stockholm, Sverige","type":"city"}]"""
+        val locationJson = """[{"lat":"59.3293","lon":"18.0686","display_name":"Stockholm, Sverige","addresstype":"city"}]"""
         val weatherJson = """
             {
                 "properties": {
@@ -120,7 +120,7 @@ class WeatherServiceTest {
     @Test
     fun `getWeatherForCity should throw LocationNotFoundException when input is not a city`() {
         // Arrange - Simulera ett svar med en plats som inte är en stad
-        val nonCityJson = """[{"lat":"59.3293","lon":"18.0686","display_name":"Stockholm Bridge, Sverige","type":"bridge"}]"""
+        val nonCityJson = """[{"lat":"59.3293","lon":"18.0686","display_name":"Stockholm Bridge, Sverige","addresstype":"bridge"}]"""
         whenever(mockResponseBody.string()).thenReturn(nonCityJson)
 
         // Act & Assert - Verifiera att rätt undantag kastas
@@ -135,7 +135,7 @@ class WeatherServiceTest {
     @Test
     fun `getWeatherForCity should return cached data when available and not expired`() {
         // Arrange - Konfigurera mock-svar för första anropet
-        val locationJson = """[{"lat":"59.3293","lon":"18.0686","display_name":"Stockholm, Sverige","type":"city"}]"""
+        val locationJson = """[{"lat":"59.3293","lon":"18.0686","display_name":"Stockholm, Sverige","addresstype":"city"}]"""
         val weatherJson = """
             {
                 "properties": {
@@ -184,7 +184,7 @@ class WeatherServiceTest {
     @Test
     fun `getWeatherForCity should throw WeatherDataException when yr API fails`() {
         // Arrange - Simulera framgångsrikt svar från OpenStreetMap men misslyckat från yr.no
-        val locationJson = """[{"lat":"59.3293","lon":"18.0686","display_name":"Stockholm, Sverige","type":"city"}]"""
+        val locationJson = """[{"lat":"59.3293","lon":"18.0686","display_name":"Stockholm, Sverige","addresstype":"city"}]"""
 
         // Konfigurera mockResponseBody för första anropet (OpenStreetMap)
         whenever(mockResponseBody.string())
