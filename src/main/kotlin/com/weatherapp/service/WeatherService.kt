@@ -80,17 +80,17 @@ open class WeatherService {
                 throw OpenStreetMapException("Inga platser hittades för '$city'")
             }
 
-            // Kontrollerar om det är en stad, ort eller by. (Alla räknas som city)
+            // Kontrollerar om det är en stad eller förort. (Båda räknas som city)
             val openStreetMapResponse = locations.firstOrNull { loc ->
-                loc.type == "city" || loc.type == "town" || loc.type == "village" //  || loc.type == "administrative" <- Vissa städer och länder finns här.
+                loc.addresstype == "city" || loc.addresstype == "suburb"
             }
 
             if (openStreetMapResponse == null) {
-                println("Ogiltig plats: '$city' är inte en stad. Första resultatet: ${locations.first().display_name} (Typ: ${locations.first().type})")
+                println("Ogiltig plats: '$city' är inte en stad. Första resultatet: ${locations.first().display_name} (Typ: ${locations.first().addresstype})")
                 throw OpenStreetMapException("'$city' är inte en giltig stad. Vänligen ange en giltig stad.")
             }
 
-            println("Hittade staden: ${openStreetMapResponse.display_name} (Typ: ${openStreetMapResponse.type})")
+            println("Hittade staden: ${openStreetMapResponse.display_name} (Typ: ${openStreetMapResponse.addresstype})")
 
             return Coordinates(
                 latitude = openStreetMapResponse.lat.toDouble(),

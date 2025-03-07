@@ -7,5 +7,5 @@ data class OpenStreetMapResponse(
     val lat: String,
     val lon: String,
     val display_name: String,
-    val type: String? = null
+    val addresstype: String
 )
